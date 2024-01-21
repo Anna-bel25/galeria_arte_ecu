@@ -183,7 +183,7 @@ Widget _botones(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Valor()),
+              MaterialPageRoute(builder: (context) => const Comentario()),
               );
           },
           child: const Text('Salir', textAlign: TextAlign.center),

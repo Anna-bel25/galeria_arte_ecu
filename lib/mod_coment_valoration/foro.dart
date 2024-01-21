@@ -64,14 +64,12 @@ class _ForoPageState extends State<ForoPage> {
             ))
         .toList();
 
-    // Obtener comentarios locales
     final prefs = await SharedPreferences.getInstance();
     final List<String> comentariosGuardados = prefs.getStringList('comentarios') ?? [];
     final List<LocalComentario> comentariosLocales = comentariosGuardados
         .map((comentarioJson) => LocalComentario.fromJson(jsonDecode(comentarioJson)))
         .toList();
 
-    // Combinar comentarios de la API y comentarios locales
     final List<Comentarios> comentariosTotales = [...comentariosApi];
       for (final comentarioLocal in comentariosLocales) {
 
@@ -82,7 +80,6 @@ class _ForoPageState extends State<ForoPage> {
           comentario: comentarioLocal.comentario,
           valoracion: comentarioLocal.valoracion,
           imagen: comentarioLocal.imagen,
-          //imagen: 'https://images.unsplash.com/photo-1579762593155-42faee39d0b4?q=80&w=1858&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         ),
       );
   }

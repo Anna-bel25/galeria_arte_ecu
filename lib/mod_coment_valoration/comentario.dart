@@ -435,44 +435,6 @@ class _ComentarioPageState extends State<ComentarioPage> {
 
 
 
-  /*void _mostrarDialogoImagenes() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Seleccionar Imagen'),
-        content: FutureBuilder<List<String>>(
-          future: _cargarImagenesDesdeAPI(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: snapshot.data!.map((imagen) {
-                    return ListTile(
-                      title: Text(imagen),
-                      onTap: () {
-                        // Aquí actualizas la URL de la imagen en el formulario
-                        // Puedes guardar la URL en una variable como hiciste con la fecha
-                        // y utilizarla en tu formulario según sea necesario.
-                        imagen = imagenSeleccionada;
-                        Navigator.of(context).pop();
-                      },
-                    );
-                  }).toList(),
-                );
-              } else {
-                return const Text('No se pudo cargar la lista de imágenes');
-              }
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
-      );
-    },
-  );
-}*/
-
   Widget _botones() {
     return Container(
       child: Column(

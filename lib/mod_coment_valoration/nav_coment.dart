@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hawk_fab_menu/hawk_fab_menu.dart';
-
 import 'comentario.dart';
 import 'foro.dart';
 import 'valoracion.dart';
@@ -65,11 +64,6 @@ class CustomHawkFabMenu extends StatelessWidget {
         labelBackgroundColor: currentScreen == 'Valoracion' ? Colors.white : Colors.blue,
 
         icon: const Icon(Icons.star_border, color: Colors.white),
-
-        //icon: const Icon(Icons.star_border),
-        //color: Colors.white,
-        //labelColor: Colors.white,
-        //labelBackgroundColor: const Color.fromARGB(255, 33, 100, 243),
       ),
 
     ],
