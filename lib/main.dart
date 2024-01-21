@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_box/flutter_text_box.dart';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
+import 'package:mod_comentario_scarlet/mod_coment_valoration/comentario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'mod_coment_valoration/valoracion.dart';
 
 void main() {
@@ -12,7 +12,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,27 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
 void initState() {
   super.initState();
-  //getStoredCredentials();
 }
 
-/*void getStoredCredentials() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      storedEmail = prefs.getString('email');
-      storedPassword = prefs.getString('password');
-    });
 
-    if (storedEmail != null && storedPassword != null) {
-      // Iniciar sesión automáticamente si las credenciales existen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Comentario()),
-      );
-    }
-  }*/
-
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,40 +154,20 @@ Widget _botones(BuildContext context) {
         const SizedBox(height: 16),
         ElevatedButton(
           //style: style,
-          //onPressed: () => ingresar(),
-          onPressed: () {
-            final state = key.currentState;
-            if (state!.validate()) {
-              state.save();
-              print("Ha ingresado del sistema");
-              print("Verificando");
-              print(email);
-              print(password);
-              print(recordar_pw);
-
-              Navigator.push(context, 
-              MaterialPageRoute(builder: (context) => const Valoracion()));
-              if (_validarCredenciales(email, password) || recordar_pw == true){
-              //if (_validarCredenciales(email, password)) {
-                print("Acceso concedido");
-                //
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Valoracion()),
-                );
-
-              } else {
-                print("Error en las credenciales de acceso");
-              }
-            }
-          },
+          onPressed: () => ingresar(context),
           child: const Text('Ingresar', textAlign: TextAlign.center),
         ),
 
         const SizedBox(height: 16),
         ElevatedButton(
           //style: style,
-          onPressed: () => salir(),
+          //onPressed: () => salir(),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Comentario()),
+              );
+          },
           child: const Text('Salir', textAlign: TextAlign.center),
         ),
       ],
@@ -228,18 +189,14 @@ void ingresar(BuildContext context) {
     print(password);
     print(recordar_pw);
 
-    // Primero comprueba las credenciales almacenadas
     if (storedEmail != null && storedPassword != null && _validarCredenciales(storedEmail!, storedPassword!)) {
     //if (storedEmail != null && storedPassword != null && _validarCredenciales(storedPassword!)) {
       print("Acceso concedido con credenciales almacenadas");
       Navigator.push(context, MaterialPageRoute(builder: (context) => const Valoracion()));
     } else {
-      // Si no hay credenciales almacenadas o son inválidas, valida las ingresadas
       if (_validarCredenciales(email, password)) {
         print("Acceso concedido");
         Navigator.push(context, MaterialPageRoute(builder: (context) => const Valoracion()));
-
-        // Si la casilla "Recordar contraseña" está marcada, guarda las credenciales
         if (recordar_pw == true) {
           saveCredentials();
         }
@@ -249,20 +206,6 @@ void ingresar(BuildContext context) {
     }
   }
     
-  
-
-
-    /*Navigator.push(context, 
-    MaterialPageRoute(builder: (context) => const Comentario()));
-    if (_validarCredenciales(email, password)) {
-      print("Acceso concedido");
-    } else {
-      print("Error en las credenciales de acceso");
-    }
-  }
-  if (recordar_pw == true) {
-    saveCredentials();
-  }*/
 }
 
 void saveCredentials() async {

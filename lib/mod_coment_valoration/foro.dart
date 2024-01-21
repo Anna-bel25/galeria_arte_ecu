@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hawk_fab_menu/hawk_fab_menu.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'coment.dart';
-//import 'menu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'model.dart';
 import 'valoracion.dart';
 import 'comentario.dart';
 
@@ -34,6 +36,7 @@ class ForoPage extends StatefulWidget {
 
 class _ForoPageState extends State<ForoPage> {
   late Future<List<Comentarios>> _listadoComentarios;
+  //HawkFabMenuController hawkFabMenuController = HawkFabMenuController(); 
   
   int selectedIndex = 0;
   var hawkFabMenuController;
@@ -46,7 +49,52 @@ class _ForoPageState extends State<ForoPage> {
     _listadoComentarios = _getForo();
   }
 
+
   Future<List<Comentarios>> _getForo() async {
+  final response = await http.get(Uri.parse('https://anna-bel25.github.io/api_comentario/comentario.json'));
+
+  if (response.statusCode == 200) {
+    final List<dynamic> data = jsonDecode(response.body);
+    final List<Comentarios> comentariosApi = data
+        .map((comentariosaData) => Comentarios(
+              fecha: comentariosaData['fecha'],
+              nombre: comentariosaData['nombre'] ?? '',
+              comentario: comentariosaData['comentario'] ?? '',
+              valoracion: comentariosaData['valoracion'] ?? '',
+              imagen: comentariosaData['imagen'] ?? '',
+            ))
+        .toList();
+
+    // Obtener comentarios locales
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> comentariosGuardados = prefs.getStringList('comentarios') ?? [];
+    final List<LocalComentario> comentariosLocales = comentariosGuardados
+        .map((comentarioJson) => LocalComentario.fromJson(jsonDecode(comentarioJson)))
+        .toList();
+
+    // Combinar comentarios de la API y comentarios locales
+    final List<Comentarios> comentariosTotales = [...comentariosApi];
+      for (final comentarioLocal in comentariosLocales) {
+
+      comentariosTotales.add(
+        Comentarios(
+          fecha: comentarioLocal.fecha,
+          nombre: comentarioLocal.nombre,
+          comentario: comentarioLocal.comentario,
+          valoracion: comentarioLocal.valoracion,
+          imagen: comentarioLocal.imagen,
+          //imagen: 'https://images.unsplash.com/photo-1579762593155-42faee39d0b4?q=80&w=1858&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        ),
+      );
+  }
+    return comentariosTotales;
+  } else {
+    throw Exception('Error de conexión');
+  }
+}
+
+
+  /*Future<List<Comentarios>> _getForo() async {
     final response = await http.get(Uri.parse('https://anna-bel25.github.io/api_comentario/comentario.json'));
 
     if (response.statusCode == 200) {
@@ -63,7 +111,8 @@ class _ForoPageState extends State<ForoPage> {
     } else {
       throw Exception('Error de conexión');
     }
-  }
+  }*/
+
 
 
   @override
@@ -89,105 +138,10 @@ class _ForoPageState extends State<ForoPage> {
 
       floatingActionButton: buildHawkFabMenu(),
 
-      
-      /*bottomNavigationBar: CustomMenu(
-      items: const ['Valoración', 'Foro', 'Comentario'],
-      selectedIndex: selectedIndex,
-      onItemSelected: (index) {
-        setState(() {
-          selectedIndex = index;
-        });
-
-        if (index == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ValoracionPage(title: 'Valoracion')),
-          );
-        } else if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ForoPage(title: 'Foro')),
-          );
-        } else if (index == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ComentarioPage(title: 'Comentario')),
-          );
-        }
-      },
-    ),*/
-
-
-      /*bottomNavigationBar: Menu(
-      currentIndex: currentIndex,
-      onTabChange: (index) {
-        setState(() => currentIndex = index);
-      },
-      getContext: () => context,
-      colors: [Colors.cyan, Colors.purple, Colors.green, Colors.red],
-    ),*/
-
 
     );
   }
 
-
-  
-  Widget buildHawkFabMenu() {
-    return HawkFabMenu(
-      icon: AnimatedIcons.menu_arrow,
-      fabColor: const Color.fromARGB(255, 255, 200, 0),
-      iconColor: const Color.fromARGB(255, 72, 3, 22),
-      hawkFabMenuController: hawkFabMenuController,
-      items: [
-
-        HawkFabMenuItem(
-          label: 'Foro',
-          ontap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Foro()),
-            );
-          },
-          color: currentScreen == 'Foro' ? Colors.white : const Color.fromARGB(255, 9, 149, 151),
-          labelColor: currentScreen == 'Foro' ? Colors.white : const Color.fromARGB(255, 9, 149, 151),
-          labelBackgroundColor: currentScreen == 'Foro' ? const Color.fromARGB(255, 9, 149, 151) : const Color.fromARGB(255, 238, 96, 163),
-
-          icon: const Icon(Icons.forum_outlined, color: Color.fromARGB(255, 9, 149, 151)),
-        ),
-
-        HawkFabMenuItem(
-          label: 'Comentario',
-          ontap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Comentario()),
-            );
-          },
-          icon: const Icon(Icons.comment_outlined, color: Color.fromARGB(255, 238, 96, 163)),
-          color: Colors.white,
-          labelColor: Colors.white,
-          labelBackgroundColor: const Color.fromARGB(255, 238, 96, 163),
-        ),
-
-        HawkFabMenuItem(
-          label: 'Valoración',
-          ontap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Valoracion()),
-            );
-          },
-          icon: const Icon(Icons.star_border, color: Color.fromARGB(255, 238, 96, 163)),
-          color: Colors.white,
-          labelColor: Colors.white,
-          labelBackgroundColor: const Color.fromARGB(255, 238, 96, 163),
-        ),
-
-      ],
-      body: const SizedBox.shrink(),
-    );
-  }
 
 
   Widget _cabecera() {
@@ -241,12 +195,15 @@ class _ForoPageState extends State<ForoPage> {
                   child: ListTile(
                     contentPadding: EdgeInsets.all(8.0),
                     leading: ClipOval(
-                      child: Image.network(coment.imagen,
+                      //child: Image.network(coment.imagen,
+                      //child: coment.imagen != null
+                      child: coment.imagen.isNotEmpty
+                      ? Image.network(coment.imagen,
                         //'https://images.unsplash.com/photo-1541520495007-26f425f8846d?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
-                      ),
+                      ): const SizedBox(),
                     ),
 
                     title: Row(
@@ -315,6 +272,63 @@ class _ForoPageState extends State<ForoPage> {
           );
         }
       },
+    );
+  }
+
+  
+  Widget buildHawkFabMenu() {
+    return HawkFabMenu(
+      icon: AnimatedIcons.menu_arrow,
+      fabColor: const Color.fromARGB(255, 255, 200, 0),
+      iconColor: const Color.fromARGB(255, 72, 3, 22),
+      hawkFabMenuController: hawkFabMenuController,
+      items: [
+
+        HawkFabMenuItem(
+          label: 'Foro',
+          ontap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Foro()),
+            );
+          },
+          color: currentScreen == 'Foro' ? Colors.white : const Color.fromARGB(255, 9, 149, 151),
+          labelColor: currentScreen == 'Foro' ? Colors.white : const Color.fromARGB(255, 9, 149, 151),
+          labelBackgroundColor: currentScreen == 'Foro' ? const Color.fromARGB(255, 9, 149, 151) : const Color.fromARGB(255, 238, 96, 163),
+
+          icon: const Icon(Icons.forum_outlined, color: Color.fromARGB(255, 9, 149, 151)),
+        ),
+
+        HawkFabMenuItem(
+          label: 'Comentario',
+          ontap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Comentario()),
+            );
+          },
+          icon: const Icon(Icons.comment_outlined, color: Color.fromARGB(255, 238, 96, 163)),
+          color: Colors.white,
+          labelColor: Colors.white,
+          labelBackgroundColor: const Color.fromARGB(255, 238, 96, 163),
+        ),
+
+        HawkFabMenuItem(
+          label: 'Valoración',
+          ontap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Valoracion()),
+            );
+          },
+          icon: const Icon(Icons.star_border, color: Color.fromARGB(255, 238, 96, 163)),
+          color: Colors.white,
+          labelColor: Colors.white,
+          labelBackgroundColor: const Color.fromARGB(255, 238, 96, 163),
+        ),
+
+      ],
+      body: const SizedBox.shrink(),
     );
   }
 

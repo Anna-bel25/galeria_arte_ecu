@@ -1,152 +1,255 @@
-import 'package:flutter/material.dart';
-
-class CustomMenu extends StatelessWidget {
-  final List<String> items;
-  final int selectedIndex;
-  final Function(int) onItemSelected;
-
-  CustomMenu({required this.items, required this.selectedIndex, required this.onItemSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(
-        items.length,
-        (index) => IconButton(
-          icon: Icon(
-            index == 0
-                ? Icons.star
-                : index == 1
-                    ? Icons.comment
-                    : Icons.forum,
-            color: index == selectedIndex ? Colors.blue : Colors.grey,
-          ),
-          onPressed: () {
-            onItemSelected(index);
-          },
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
-
 /*import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:hawk_fab_menu/hawk_fab_menu.dart';
+import 'model.dart';
+import 'dart:convert';
+//import 'menu.dart';
 import 'comentario.dart';
-import 'valoracion.dart';
 import 'foro.dart';
 
-
-class Menu extends StatefulWidget {
-  final int currentIndex;
-  final ValueChanged<int> onTabChange;
-  final BuildContext Function() getContext;
-  final List<Color> colors;
-
-  Menu({
-    required this.currentIndex,
-    required this.onTabChange,
-    required this.getContext,
-    required this.colors,
-  });
-
-  @override
-  _MenuState createState() => _MenuState();
-}
-
-
-class _MenuState extends State<Menu> {
-  int _currentIndex = 0;
-
-  void _onTabChange(int index) {
-    widget.onTabChange(index);
-      setState(() {
-      _currentIndex = index;
-    });
-    print('Índice de pestaña cambiado a: $index');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => _getPage(index)),
-    );
-  }
-
-
-Widget _getPage(int index) {
-  switch (index) {
-    case 0:
-      return const ForoPage(title: 'Foro');
-    case 1:
-      return const ComentarioPage(title: 'Comentario');
-    case 2:
-      return const ValoracionPage(title: 'Obras más valoradas');
-    default:
-      return const ForoPage(title: 'Foro');
-  }
-}
-
-
+class Valoration extends StatelessWidget {
+  const Valoration ({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GNav(
-      color: widget.colors[_currentIndex],
-      tabBackgroundColor: widget.colors[_currentIndex],
-      selectedIndex: _currentIndex,
-      //onTabChange: _onTabChange,
-      tabs: const [
-        GButton(
-          icon: Icons.forum_outlined,
-          text: 'Foro',
-          iconActiveColor: Colors.white,
-          textColor: Colors.white,
-        ),
-        GButton(
-          icon: Icons.comment_outlined,
-          text: 'Comentario',
-          iconActiveColor: Colors.white,
-          textColor: Colors.white,
-        ),
-        GButton(
-          icon: Icons.star_border,
-          text: 'Valoración',
-          iconActiveColor: Colors.white,
-          textColor: Colors.white,
-        ),
-      ],
+    return MaterialApp(
+      title: 'Obras más Valoradas',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 26, 188, 191)),
+        useMaterial3: true,
+      ),
+      home: const ValorationPage(title: 'Obras más Valoradas'),
     );
   }
-}*/
+}
+
+class ValorationPage extends StatefulWidget {
+  const ValorationPage({super.key, required this.title});
+  final String title;
+
+  @override
+  State<ValorationPage> createState() => _ValorationPageState();
+}
+
+class _ValorationPageState extends State<ValorationPage> {
+  List<Obra> obras = [];
+  int selectedIndex = 0;
+  var hawkFabMenuController;
+  String currentScreen = 'Valoracion';
 
 
-          /*body: Center(
-        child: body[_currentIndex],
+  @override
+  void initState() {
+    super.initState();
+    _verObras();
+  }
+
+  Future<void> _verObras() async {
+    final jsonString = await DefaultAssetBundle.of(context).loadString('documento/obras.json');
+    final List<dynamic> jsonData = json.decode(jsonString);
+
+    setState(() {
+      obras = jsonData.map((obra) {
+        return Obra(
+          autor: obra['autor'],
+          titulo: obra['titulo'],
+          fechaPublicacion: obra['fecha_publicacion'],
+          descripcion: obra['descripcion'],
+          imagen: obra['imagen'],
+          valoracion: obra['valoracion'],
+        );
+      }).toList();
+    });
+  }
+
+  
+  
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      //backgroundColor: Colors.transparent,
+      //title: Text(widget.title),
+      //elevation: 0,
+      toolbarHeight: 100,
+      flexibleSpace: _cabecera(),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int newIndex) {
-          setState(() {
-            _currentIndex = newIndex;
-          });
-        },
-        items: const[
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-            ),
-          BottomNavigationBarItem(
-            label: 'Menu',
-            icon: Icon(Icons.menu),
-            ),
-          BottomNavigationBarItem(
-            label: 'Profile',
-            icon: Icon(Icons.person),
-            ),
+
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //_cabecera(),
+          Expanded(
+            child: _obrasValoradas(),
+          ),
         ],
-      ),*/
-          
-        
+      ),
+
+      floatingActionButton: buildHawkFabMenu(),
+
+  ); 
+}
+
+
+  Widget buildHawkFabMenu() {
+    return HawkFabMenu(
+      icon: AnimatedIcons.menu_arrow,
+      fabColor: const Color.fromARGB(255, 255, 200, 0),
+      iconColor: const Color.fromARGB(255, 72, 3, 22),
+      hawkFabMenuController: hawkFabMenuController,
+      items: [
+
+        HawkFabMenuItem(
+          label: 'Foro',
+          ontap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Foro()),
+            );
+          },
+          icon: const Icon(Icons.forum_outlined, color:Color.fromARGB(255, 238, 96, 163)),
+          color: Colors.white,
+          labelColor: Colors.white,
+          labelBackgroundColor: const Color.fromARGB(255, 238, 96, 163),
+        ),
+
+        HawkFabMenuItem(
+          label: 'Comentario',
+          ontap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Comentario()),
+            );
+          },
+          icon: const Icon(Icons.comment_outlined, color:Color.fromARGB(255, 238, 96, 163)),
+          color: Colors.white,
+          labelColor: Colors.white,
+          labelBackgroundColor: const Color.fromARGB(255, 238, 96, 163),
+        ),
+
+        HawkFabMenuItem(
+          label: 'Valoración',
+          ontap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Valoration()),
+            );
+          },
+          color: currentScreen == 'Valoracion' ? Colors.white : const Color.fromARGB(255, 9, 149, 151),
+          labelColor: currentScreen == 'Valoracion' ? Colors.white : const Color.fromARGB(255, 9, 149, 151),
+          labelBackgroundColor: currentScreen == 'Valoracion' ? const Color.fromARGB(255, 9, 149, 151) : const Color.fromARGB(255, 238, 96, 163),
+
+          icon: const Icon(Icons.star_border, color: Color.fromARGB(255, 9, 149, 151)),
+        ),
+
+      ],
+      body: const SizedBox.shrink(),
+    );
+  }
+
+
+  Widget _cabecera() {
+    return Container (
+      height: 150,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: const NetworkImage('https://images.unsplash.com/photo-1579762593155-42faee39d0b4?q=80&w=1858&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.4),
+            //BlendMode.dstATop,
+            BlendMode.srcOver,
+          ),
+        ),
+      ),
+      
+      child: const Center(
+        child: Text('OBRAS MÁS VALORADAS',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 255, 255, 255),
+        ),
+        ),
+      ),
+
+    );
+  }
+
+
+
+  Widget _obrasValoradas() {
+    return ListView.builder(
+      itemCount: obras.length,
+      itemBuilder: (context, index) {
+        final obra = obras[index];
+        return Padding(
+          //padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(left: 18, right: 18, bottom: 8, top: 22),
+          child: Card(
+            color: Colors.grey[100],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 250,
+                  width: double.infinity,
+                  child: Image.network(
+                    obra.imagen,
+                    fit: BoxFit.contain, //cover
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    obra.titulo,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Autor: ${obra.autor}'),
+                      Text('Fecha de Publicación: ${obra.fechaPublicacion}'),
+                      Text('Descripción: ${obra.descripcion}'),
+                      Row(
+                        children: [
+                          const Text('Valoración: '),
+                          RatingBar.builder(
+                            itemBuilder: (context, index) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              /*setState(() {
+                                obra.mutableValoracion = rating;
+                              });*/
+                            },
+                            itemCount: 5,
+                            itemSize: 25,
+                            allowHalfRating: true,
+                            unratedColor: Colors.grey,
+                            initialRating: obra.mutableValoracion,
+                            updateOnDrag: true,
+                            tapOnlyMode: false,
+                            ignoreGestures: true,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                //const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+
+}*/
