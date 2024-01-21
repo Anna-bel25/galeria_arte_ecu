@@ -36,12 +36,11 @@ class ComentarioPage extends StatefulWidget {
 
 class _ComentarioPageState extends State<ComentarioPage> {
   final key = GlobalKey<FormState>();
+
   final ButtonStyle style = FilledButton.styleFrom(
     textStyle: const TextStyle(
       fontSize: 16,
-      //fontWeight: FontWeight.bold,
     ),
-    //backgroundColor: Color.fromARGB(160, 222, 247, 249),
   );
 
   String nombre = "", comentario = "", imagen = "";
@@ -55,36 +54,34 @@ class _ComentarioPageState extends State<ComentarioPage> {
   String currentScreen = 'Comentario';
 
 
-void _guardarComentarioLocalmente() async {
-  final prefs = await SharedPreferences.getInstance();
-  final List<String> comentariosGuardados = prefs.getStringList('comentarios') ?? [];
+  void _guardarComentarioLocalmente() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> comentariosGuardados = prefs.getStringList('comentarios') ?? [];
 
-  final nuevoComentario = LocalComentario(
-    fecha: DateFormat('dd-MM-yyyy').format(fecha!),
-    nombre: nombre,
-    comentario: comentario,
-    valoracion: valoracion,
-    imagen: imagen,
-  );
+    final nuevoComentario = LocalComentario(
+      fecha: DateFormat('dd-MM-yyyy').format(fecha!),
+      nombre: nombre,
+      comentario: comentario,
+      valoracion: valoracion,
+      imagen: imagen,
+    );
 
-  comentariosGuardados.add(jsonEncode(nuevoComentario.toJson()));
-  prefs.setStringList('comentarios', comentariosGuardados);
-}
+    comentariosGuardados.add(jsonEncode(nuevoComentario.toJson()));
+    prefs.setStringList('comentarios', comentariosGuardados);
+  }
 
 
-void eliminarComentarioLocal(String fecha) async {
-  final prefs = await SharedPreferences.getInstance();
-  final List<String> comentariosGuardados = prefs.getStringList('comentarios') ?? [];
+  void eliminarComentarioLocal(String fecha) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> comentariosGuardados = prefs.getStringList('comentarios') ?? [];
 
-  List<LocalComentario> comentariosLocales = comentariosGuardados
-      .map((comentarioJson) => LocalComentario.fromJson(jsonDecode(comentarioJson)))
-      .toList();
+    List<LocalComentario> comentariosLocales = comentariosGuardados
+        .map((comentarioJson) => LocalComentario.fromJson(jsonDecode(comentarioJson)))
+        .toList();
 
-  comentariosLocales.removeWhere((comentario) => comentario.fecha == fecha);
-  // Guarda la lista actualizada de comentarios locales
-  prefs.setStringList('comentarios', comentariosLocales.map((comentario) => jsonEncode(comentario.toJson())).toList());
-}
-
+    comentariosLocales.removeWhere((comentario) => comentario.fecha == fecha);
+    prefs.setStringList('comentarios', comentariosLocales.map((comentario) => jsonEncode(comentario.toJson())).toList());
+  }
 
 
   @override
@@ -94,7 +91,7 @@ void eliminarComentarioLocal(String fecha) async {
   }
 
 
-Future<void> cargarImagenesDesdeAPI() async {
+  Future<void> cargarImagenesDesdeAPI() async {
     try {
       final response = await http.get(Uri.parse('https://anna-bel25.github.io/api_comentario/perfil.json'));
       if (response.statusCode == 200) {
@@ -150,7 +147,6 @@ Future<void> cargarImagenesDesdeAPI() async {
 
 
 
-
 @override
   Widget build(BuildContext context) {    
     return Scaffold(
@@ -169,7 +165,6 @@ Future<void> cargarImagenesDesdeAPI() async {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //_cabecera(),
                 _formulario(),
                 _botones(),
               ],
@@ -480,8 +475,6 @@ Future<void> cargarImagenesDesdeAPI() async {
 
   Widget _botones() {
     return Container(
-      //alignment: Alignment.bottomCenter,
-      //padding: const EdgeInsets.only(bottom: 95),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

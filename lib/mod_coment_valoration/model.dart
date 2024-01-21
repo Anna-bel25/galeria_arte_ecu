@@ -23,7 +23,6 @@ class LocalComentario {
     };
   }
 
-  // Agrega este método para crear un objeto LocalComentario desde un mapa JSON.
   factory LocalComentario.fromJson(Map<String, dynamic> json) {
     return LocalComentario(
       fecha: json['fecha'],

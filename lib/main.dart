@@ -1,8 +1,17 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_box/flutter_text_box.dart';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
+
 import 'package:mod_comentario_scarlet/mod_coment_valoration/comentario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:mod_comentario_scarlet/mod_perfil_usuario/themes.dart';
+import 'package:mod_comentario_scarlet/mod_perfil_usuario/usurioperfil.dart';
+//import 'package:mod_comentario_scarlet/navmain.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
+
 import 'mod_coment_valoration/valoracion.dart';
 
 void main() {
@@ -14,16 +23,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 26, 188, 191)),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Login'),
+    
+    final user = usuarioperfil.miUsuario;
+
+    return ThemeProvider(
+      initTheme: MyThemes.lightTheme,
+      builder: (context, theme) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: theme,
+        home: const MyHomePage(title: 'Login'),
+      );
+    },
     );
   }
 }
+
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -35,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  
   final key = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -60,6 +77,7 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -165,7 +183,7 @@ Widget _botones(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Comentario()),
+              MaterialPageRoute(builder: (context) => const Valor()),
               );
           },
           child: const Text('Salir', textAlign: TextAlign.center),
@@ -190,7 +208,6 @@ void ingresar(BuildContext context) {
     print(recordar_pw);
 
     if (storedEmail != null && storedPassword != null && _validarCredenciales(storedEmail!, storedPassword!)) {
-    //if (storedEmail != null && storedPassword != null && _validarCredenciales(storedPassword!)) {
       print("Acceso concedido con credenciales almacenadas");
       Navigator.push(context, MaterialPageRoute(builder: (context) => const Valoracion()));
     } else {
@@ -208,11 +225,11 @@ void ingresar(BuildContext context) {
     
 }
 
-void saveCredentials() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('email', email);
-  await prefs.setString('password', password);
-}
+  void saveCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
+    await prefs.setString('password', password);
+  }
 
   bool _validarCredenciales(String email, String password) {
     String userEmail = "grupo6";

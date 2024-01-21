@@ -36,7 +36,6 @@ class ForoPage extends StatefulWidget {
 
 class _ForoPageState extends State<ForoPage> {
   late Future<List<Comentarios>> _listadoComentarios;
-  //HawkFabMenuController hawkFabMenuController = HawkFabMenuController(); 
   
   int selectedIndex = 0;
   var hawkFabMenuController;
@@ -94,25 +93,6 @@ class _ForoPageState extends State<ForoPage> {
 }
 
 
-  /*Future<List<Comentarios>> _getForo() async {
-    final response = await http.get(Uri.parse('https://anna-bel25.github.io/api_comentario/comentario.json'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data
-          .map((comentariosaData) => Comentarios(
-                fecha: comentariosaData['fecha'],
-                nombre: comentariosaData['nombre'] ?? '',
-                comentario: comentariosaData['comentario'] ?? '',
-                valoracion: comentariosaData['valoracion'] ?? '',
-                imagen: comentariosaData['imagen'] ?? '',
-              ))
-          .toList();
-    } else {
-      throw Exception('Error de conexión');
-    }
-  }*/
-
 
 
   @override
@@ -128,16 +108,13 @@ class _ForoPageState extends State<ForoPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //_cabecera(),
           Expanded(
             child: _foro(),
           ),
         ],
       ),
       
-
       floatingActionButton: buildHawkFabMenu(),
-
 
     );
   }
@@ -195,11 +172,8 @@ class _ForoPageState extends State<ForoPage> {
                   child: ListTile(
                     contentPadding: EdgeInsets.all(8.0),
                     leading: ClipOval(
-                      //child: Image.network(coment.imagen,
-                      //child: coment.imagen != null
                       child: coment.imagen.isNotEmpty
                       ? Image.network(coment.imagen,
-                        //'https://images.unsplash.com/photo-1541520495007-26f425f8846d?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,

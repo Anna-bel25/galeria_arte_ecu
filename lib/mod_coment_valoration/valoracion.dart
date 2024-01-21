@@ -73,9 +73,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      //backgroundColor: Colors.transparent,
       //title: Text(widget.title),
-      //elevation: 0,
       toolbarHeight: 100,
       flexibleSpace: _cabecera(),
       ),
@@ -83,7 +81,6 @@ Widget build(BuildContext context) {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //_cabecera(),
           Expanded(
             child: _obrasValoradas(),
           ),
