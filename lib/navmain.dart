@@ -3,7 +3,7 @@ import 'package:mod_comentario_scarlet/mod_coment_valoration/valoracion.dart';
 import 'package:mod_comentario_scarlet/mod_galeria_home/ivette.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/perfil.dart';
 //import 'package:mod_comentario_scarlet/mod_perfil_usuario/perfil.dart';
-import 'package:mod_comentario_scarlet/mod_perfil_usuario/EditarCuenta.dart';
+//import 'package:mod_comentario_scarlet/mod_perfil_usuario/EditarCuenta.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -37,24 +37,24 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         elevation: 0,
-        items: [
+        items: const [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.account_balance_outlined),
-            activeIcon: const Icon(Icons.account_balance),
+            icon: Icon(Icons.account_balance_outlined),
+            activeIcon: Icon(Icons.account_balance),
             label: 'Obras',
-            backgroundColor: colors.primary,
+            backgroundColor:  Color.fromARGB(255, 18, 127, 116),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: const Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: 'Galeria',
-            backgroundColor: colors.primary,
+            backgroundColor: Color.fromARGB(255, 18, 127, 116),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.person_3_outlined),
-            activeIcon: const Icon(Icons.person_3),
+            icon: Icon(Icons.person_3_outlined),
+            activeIcon: Icon(Icons.person_3),
             label: 'Cuenta',
-            backgroundColor: colors.primary,
+            backgroundColor: Color.fromARGB(255, 18, 127, 116),
           ),
         ],
       ),

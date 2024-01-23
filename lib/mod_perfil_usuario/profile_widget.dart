@@ -71,7 +71,7 @@ class ProfileWidget extends StatelessWidget {
       ClipOval(
         child: Container(
           padding: EdgeInsets.all(all),
-          color: color,
+          color: const Color.fromARGB(255, 18, 127, 116),
           child: child,
         ),
       );

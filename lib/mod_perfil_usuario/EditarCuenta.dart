@@ -30,7 +30,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 const SizedBox(height: 24),
                 TextFieldWidget(
-                  label: 'Full Name',
+                  label: 'Nombre Completo',
                   text: user.nombre,
                   onChanged: (name) {},
                 ),
@@ -42,7 +42,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 const SizedBox(height: 24),
                 TextFieldWidget(
-                  label: 'About',
+                  label: 'Sobre Mi',
                   text: user.SobreMe,
                   maxLines: 5,
                   onChanged: (about) {},

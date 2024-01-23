@@ -1,0 +1,17 @@
+<favoritos>
+    <arte>
+        <nombre>La edad de la Ira</nombre>
+        <descripcion>Representación de la ira y el sufrimiento humano</descripcion>
+        <imagen>https://www.elciudadano.com/wp-content/uploads/2016/02/guayasa2-1024x517.jpg</imagen>
+    </arte>
+    <arte>
+        <nombre>amanecer en galapagos</nombre>
+        <descripcion>Captura poética del amanecer en las islas Galápagos</descripcion>
+        <imagen>https://th.bing.com/th/id/OIP.kk8T9W3PAFmmSh84HczUsAHaFS?rs=1&pid=ImgDetMain</imagen>
+    </arte>
+    <arte>
+        <nombre>Flores de mi tierra</nombre>
+        <descripcion>Vibrantes flores locales capturadas en una obra colorida</descripcion>
+        <imagen>https://th.bing.com/th/id/R.0e354aa6b06b46be212c3db12f56fbce?rik=0GDbTwyHDTZwfw&pid=ImgRaw&r=0</imagen>
+    </arte>
+</favoritos>

@@ -17,7 +17,7 @@ class Botones extends StatelessWidget {
           shape: const StadiumBorder(),
           onPrimary: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-          backgroundColor: Colors.grey
+          backgroundColor: const Color.fromARGB(255, 18, 127, 116)
         ),
         child: Text(text),
         onPressed: onClicked,

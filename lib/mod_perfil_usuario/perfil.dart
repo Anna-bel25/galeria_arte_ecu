@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/Botones.dart';
+import 'package:mod_comentario_scarlet/mod_perfil_usuario/artes.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/numeroRanking.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/profile_widget.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/themes.dart';
@@ -42,7 +43,8 @@ class _perfilViewViewState extends State<perfilView> {
      const SizedBox(height: 24),
           buildName(user),
           const SizedBox(height: 24),
-          Center(child: buildUpgradeButton()),
+          Center(child: buildUpgradeButton(
+          )),
           const SizedBox(height: 24),
           numeroRanking(),
           const SizedBox(height: 48),
@@ -67,8 +69,8 @@ class _perfilViewViewState extends State<perfilView> {
       );
 
   Widget buildUpgradeButton() => Botones(
-        text: 'Editar Cuenta',
-        onClicked: () {},
+        text: 'Favoritos',
+        onClicked: () { Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritosPage()));},
       );
 
   Widget buildAbout(User user) => Container(

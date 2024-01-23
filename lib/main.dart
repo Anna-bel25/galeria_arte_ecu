@@ -4,6 +4,7 @@ import 'package:flutter_text_box/flutter_text_box.dart';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 
 import 'package:mod_comentario_scarlet/mod_coment_valoration/comentario.dart';
+import 'package:mod_comentario_scarlet/navmain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/themes.dart';
@@ -209,11 +210,11 @@ void ingresar(BuildContext context) {
 
     if (storedEmail != null && storedPassword != null && _validarCredenciales(storedEmail!, storedPassword!)) {
       print("Acceso concedido con credenciales almacenadas");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const Valoracion()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
     } else {
       if (_validarCredenciales(email, password)) {
         print("Acceso concedido");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Valoracion()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
         if (recordar_pw == true) {
           saveCredentials();
         }
