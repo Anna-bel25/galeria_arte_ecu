@@ -16,6 +16,7 @@ class _FavoritosPageState extends State<FavoritosPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _leerFavoritos();
+
   }
 
   Future<void> _leerFavoritos() async {

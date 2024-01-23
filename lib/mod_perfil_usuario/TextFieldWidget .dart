@@ -31,7 +31,6 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 
@@ -51,7 +50,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            maxLines: widget.maxLines,
+             maxLines: widget.maxLines,
+            onChanged: widget.onChanged,
           ),
         ],
       );

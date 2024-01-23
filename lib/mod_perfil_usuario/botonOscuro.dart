@@ -5,9 +5,10 @@ import 'package:mod_comentario_scarlet/mod_perfil_usuario/themes.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/usurioperfil.dart';
 
 AppBar buildAppBar(BuildContext context) {
-  final modoOscuro = Theme.of(context).brightness == Brightness.dark;
-   final icon = CupertinoIcons.moon_stars;
-   final user = usuarioperfil.miUsuario;
+   final user = usuarioperfil.getUser();
+  final modoOscuro = user.modoOscuro;
+  final icon = modoOscuro ? CupertinoIcons.sun_max : CupertinoIcons.moon_stars;
+
 
   return AppBar(
     leading: BackButton(),
@@ -23,6 +24,9 @@ AppBar buildAppBar(BuildContext context) {
 
             final switcher = ThemeSwitcher.of(context)!;
             switcher.changeTheme(theme: theme);
+
+            final newUser = user.copy(modoOscuro: !modoOscuro);
+            usuarioperfil.setUser(newUser);
           },
         ),
       ),

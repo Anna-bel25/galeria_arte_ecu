@@ -1,5 +1,6 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_text_box/flutter_text_box.dart';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 
@@ -12,20 +13,26 @@ import 'package:mod_comentario_scarlet/mod_perfil_usuario/usurioperfil.dart';
 //import 'package:mod_comentario_scarlet/navmain.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-import 'mod_coment_valoration/valoracion.dart';
+  await usuarioperfil.init();
 
-void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+   //await usuarioperfil.init();
+   
   @override
   Widget build(BuildContext context) {
-    
-    final user = usuarioperfil.miUsuario;
+    final user = usuarioperfil.getUser();
 
     return ThemeProvider(
       initTheme: MyThemes.lightTheme,
