@@ -191,7 +191,7 @@ Widget _botones(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const homeGaleria()),
+                MaterialPageRoute(builder: (context) => const Comentario()),
               );
           },
           child: const Text('Salir', textAlign: TextAlign.center),
@@ -217,11 +217,11 @@ void ingresar(BuildContext context) {
 
     if (storedEmail != null && storedPassword != null && _validarCredenciales(storedEmail!, storedPassword!)) {
       print("Acceso concedido con credenciales almacenadas");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
+       Navigator.push(context, MaterialPageRoute(builder: (context) => const homeGaleria()));
     } else {
       if (_validarCredenciales(email, password)) {
         print("Acceso concedido");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
+         Navigator.push(context, MaterialPageRoute(builder: (context) => const homeGaleria()));
         if (recordar_pw == true) {
           saveCredentials();
         }
