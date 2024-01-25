@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mod_comentario_scarlet/mod_coment_valoration/valoracion.dart';
-import 'package:mod_comentario_scarlet/mod_galeria_home/ivette.dart';
+import 'package:mod_comentario_scarlet/mod_galeria_home/galeria/galeria_pinturas.dart';
 import 'package:mod_comentario_scarlet/mod_perfil_usuario/perfil.dart';
 //import 'package:mod_comentario_scarlet/mod_perfil_usuario/perfil.dart';
 //import 'package:mod_comentario_scarlet/mod_perfil_usuario/EditarCuenta.dart';
@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    final screens = [const Valoracion(), const ivetteView(), const perfilView()];
+    final screens = [const Valoracion(), const galeria_pinturas(), const perfilView()];
 
     return Scaffold(
       
